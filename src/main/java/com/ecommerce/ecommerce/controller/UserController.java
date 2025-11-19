@@ -33,7 +33,7 @@ public class UserController {
         return userService.createUser(userDto);
     }
 
-    @Operation(summary = "delete user by id", description = "API to create a new user in the system.")
+    @Operation(summary = "delete user by id gdfgfhfghgyd", description = "API to create a new user in the system.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "User successfully created."),
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
