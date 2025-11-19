@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class SystemUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
