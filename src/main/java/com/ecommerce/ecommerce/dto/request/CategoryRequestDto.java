@@ -1,20 +1,15 @@
 package com.ecommerce.ecommerce.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
 public class CategoryRequestDto {
     private String title;
 
-    public CategoryRequestDto() {
-    }
-
-    public CategoryRequestDto(String title) {
-        this.title = title;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }

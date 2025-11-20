@@ -29,7 +29,6 @@ public class UserService {
         SystemUser systemUser = userRepositories.save(mappedUser);
 
         return ObjectMapperUtils.map(systemUser, UserResponseDto.class);
-
     }
 
 

@@ -8,10 +8,10 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    List<Item> findByBooked(boolean booked);
+    List<Item> findAllByBooked(boolean booked);
 
     List<Item> findByPriceBetween(double min, double max);
 
-    List<Item> findByCategoryId(Long categoryId);
+    Item updateByBooked(Long id, boolean booked);
 
 }
