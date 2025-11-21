@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
-
 @Service
 @AllArgsConstructor
 public class ItemService {
@@ -55,55 +54,56 @@ public class ItemService {
 
 
     public List<ItemResponseDto> getAllItems() {
-        return ObjectMapperUtils.mapAll(itemRepository.findAll() , ItemResponseDto.class);
+        return ObjectMapperUtils.mapAll(itemRepository.findAll(), ItemResponseDto.class);
     }
 
 
     public List<ItemResponseDto> getAllBookedItems() {
-        List <Item> items = itemRepository.findAllByBooked(true);
-        return ObjectMapperUtils.mapAll(items , ItemResponseDto.class);
+        List<Item> items = itemRepository.findAllByBooked(true);
+        return ObjectMapperUtils.mapAll(items, ItemResponseDto.class);
     }
 
 
     public List<ItemResponseDto> getAllAvailableItems() {
         List<Item> items = itemRepository.findAllByBooked(false);
-        return ObjectMapperUtils.mapAll(items , ItemResponseDto.class);
+        return ObjectMapperUtils.mapAll(items, ItemResponseDto.class);
     }
 
 
     public List<ItemResponseDto> getItemsByPriceRange(double minPrice, double maxPrice) {
         List<Item> items = itemRepository.findByPriceBetween(minPrice, maxPrice);
-        return ObjectMapperUtils.mapAll(items , ItemResponseDto.class);
+        return ObjectMapperUtils.mapAll(items, ItemResponseDto.class);
     }
 
 
-    public ItemResponseDto updateItemBooked(Long id, boolean booked) {
+    public void updateItemBooked(Long id, boolean booked) {
 
         boolean existsBookedById = itemRepository.existsById(id);
-        if (!existsBookedById){
+        if (!existsBookedById) {
             throw new RuntimeException("Item Not Found!");
         }
-        Item item = itemRepository.updateByBooked(id , booked);
+        Item item = itemRepository.findById(id).get();
+        item.setBooked(booked);
         itemRepository.save(item);
-        return ObjectMapperUtils.map(item , ItemResponseDto.class);
+
     }
 
 
     public ItemResponseDto getItemById(Long id) {
         boolean existsItemById = itemRepository.existsById(id);
-        if (!existsItemById){
+        if (!existsItemById) {
             throw new RuntimeException("Item Not Find!");
         }
         Item item = itemRepository.findById(id).get();
-        return ObjectMapperUtils.map(item , ItemResponseDto.class);
+        return ObjectMapperUtils.map(item, ItemResponseDto.class);
     }
 
 
     public ItemResponseDto getItemsByCategory(Long categoryId) {
         boolean existsItemByCategoryId = itemRepository.existsById(categoryId);
-        if(!existsItemByCategoryId){
+        if (!existsItemByCategoryId) {
             throw new RuntimeException("Category Not Found!");
         }
-        return ObjectMapperUtils.map(itemRepository.findById(categoryId) , ItemResponseDto.class);
+        return ObjectMapperUtils.map(itemRepository.findById(categoryId), ItemResponseDto.class);
     }
 }

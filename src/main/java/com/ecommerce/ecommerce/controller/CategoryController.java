@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,14 +28,16 @@ public class CategoryController {
 
     @Operation(summary = "Create a new category", description = "API to create a new category in the system.")
     @PostMapping("/create")
-    public CategoryResponseDto createCategory(@RequestBody CategoryRequestDto CategoryDto) {
-        return categoryService.createCategory(CategoryDto);
+    public ResponseEntity<?> createCategory(@RequestBody CategoryRequestDto CategoryDto) {
+        CategoryResponseDto category = categoryService.createCategory(CategoryDto);
+        return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
 
     @Operation(summary = "get category with item", description = "API to show categry with item in the system.")
     @GetMapping("/get-with-item/{id}")
-    public CategoryResponseDto getCategoryWithItems(@PathVariable Long id) {
-        return categoryService.getCategoryWithItems(id);
+    public ResponseEntity<?> getCategoryWithItems(@PathVariable Long id) {
+        return new ResponseEntity<>(categoryService.getCategoryWithItems(id), HttpStatus.OK);
+
     }
 
     @Operation(summary = "show all categories", description = "API to show all categories in the system.")

@@ -12,6 +12,4 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findByPriceBetween(double min, double max);
 
-    Item updateByBooked(Long id, boolean booked);
-
 }
