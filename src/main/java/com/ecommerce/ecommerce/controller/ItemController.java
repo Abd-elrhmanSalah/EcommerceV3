@@ -89,7 +89,7 @@ public class ItemController {
 
     @Operation(summary = "show items by category", description = "API to show items by category")
     @GetMapping("/show-category/{id}")
-    public ItemResponseDto getItemsByCategory(@PathVariable Long id) {
+    public List<ItemResponseDto> getItemsByCategory(@PathVariable Long id) {
         return itemService.getItemsByCategory(id);
     }
 

@@ -37,14 +37,20 @@ public class UserService {
         return ObjectMapperUtils.mapAll(userRepositories.findAll(), UserResponseDto.class);
     }
 
+
+
     public UserResponseDto updateUser(Long id, UserRequestDto userDto) {
-        isUserExist(id);
+        SystemUser existingUser = userRepositories.findById(id)
+                .orElseThrow(()-> new RuntimeException("User Not Found"));
 
-        SystemUser systemUser = ObjectMapperUtils.map(userDto, SystemUser.class);
+        existingUser.setFirstName(userDto.getFirstName());
+        existingUser.setLastName(userDto.getLastName());
+        existingUser.setEmail(userDto.getEmail());
+        existingUser.setPhoneNumber(userDto.getPhoneNumber());
+        existingUser.setPassword(userDto.getPassword());
 
-        SystemUser saved = userRepositories.save(systemUser);
-        return ObjectMapperUtils.map(saved, UserResponseDto.class);
-
+        SystemUser saved = userRepositories.save(existingUser);
+        return ObjectMapperUtils.map(saved , UserResponseDto.class);
     }
 
 
@@ -82,6 +88,8 @@ public class UserService {
         return new BlockStatus("User unblocked successfully", true);
     }
 
+
+
     private void isUserExist(Long userId) {
 
         Optional<SystemUser> userById = userRepositories.findById(userId);
@@ -89,8 +97,6 @@ public class UserService {
         if (userById.isEmpty()) {
             throw new RuntimeException("User Not Found");
         }
-
-
     }
 
 }

@@ -2,6 +2,7 @@ package com.ecommerce.ecommerce.service;
 
 import com.ecommerce.ecommerce.dto.request.ItemRequestDto;
 import com.ecommerce.ecommerce.dto.response.ItemResponseDto;
+import com.ecommerce.ecommerce.entity.Category;
 import com.ecommerce.ecommerce.entity.Item;
 import com.ecommerce.ecommerce.repositories.CategoryRepository;
 import com.ecommerce.ecommerce.repositories.ItemRepository;
@@ -10,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 
 
 @Service
@@ -22,28 +22,31 @@ public class ItemService {
 
 
     public ItemResponseDto createItem(ItemRequestDto itemDto) {
-        boolean isCategoryExist = categoryRepository.existsById(itemDto.getCategoryId());
-        if (!isCategoryExist) {
-            throw new RuntimeException("Category Not Found!");
-        }
-        Item mappedItem = ObjectMapperUtils.map(itemDto, Item.class);
-        Item item = itemRepository.save(mappedItem);
-        return ObjectMapperUtils.map(item, ItemResponseDto.class);
+        Category category = categoryRepository.findById(itemDto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category Not Found!"));
+
+        Item itemMapped = ObjectMapperUtils.map(itemDto, Item.class);
+        itemMapped.setCategory(category);
+
+        Item saved = itemRepository.save(itemMapped);
+        return ObjectMapperUtils.map(saved, ItemResponseDto.class);
     }
 
     public ItemResponseDto updateItem(Long id, ItemRequestDto itemDto) {
-        boolean existsItemById = itemRepository.existsById(id);
-        if (!existsItemById) {
-            throw new RuntimeException("Item Not Found!");
-        }
-        boolean existsCategoryById = categoryRepository.existsById(itemDto.getCategoryId());
-        if (!existsCategoryById) {
-            throw new RuntimeException("Category Not Found!");
-        }
+        Item existingItem = itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item Not Found!"));
 
-        Item mappedItem = ObjectMapperUtils.map(itemDto, Item.class);
-        Item item = itemRepository.save(mappedItem);
-        return ObjectMapperUtils.map(item, ItemResponseDto.class);
+        Category category = categoryRepository.findById(itemDto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category Not Found!"));
+
+        existingItem.setTitle(itemDto.getTitle());
+        existingItem.setDescription(itemDto.getDescription());
+        existingItem.setPrice(itemDto.getPrice());
+        existingItem.setImagePath(itemDto.getImagePath());
+        existingItem.setCategory(category);
+
+        Item saved = itemRepository.save(existingItem);
+        return ObjectMapperUtils.map(saved, ItemResponseDto.class);
     }
 
 
@@ -55,55 +58,51 @@ public class ItemService {
 
 
     public List<ItemResponseDto> getAllItems() {
-        return ObjectMapperUtils.mapAll(itemRepository.findAll() , ItemResponseDto.class);
+        return ObjectMapperUtils.mapAll(itemRepository.findAll(), ItemResponseDto.class);
     }
 
 
     public List<ItemResponseDto> getAllBookedItems() {
-        List <Item> items = itemRepository.findAllByBooked(true);
-        return ObjectMapperUtils.mapAll(items , ItemResponseDto.class);
+        List<Item> items = itemRepository.findAllByBooked(true);
+        return ObjectMapperUtils.mapAll(items, ItemResponseDto.class);
     }
 
 
     public List<ItemResponseDto> getAllAvailableItems() {
         List<Item> items = itemRepository.findAllByBooked(false);
-        return ObjectMapperUtils.mapAll(items , ItemResponseDto.class);
+        return ObjectMapperUtils.mapAll(items, ItemResponseDto.class);
     }
 
 
     public List<ItemResponseDto> getItemsByPriceRange(double minPrice, double maxPrice) {
         List<Item> items = itemRepository.findByPriceBetween(minPrice, maxPrice);
-        return ObjectMapperUtils.mapAll(items , ItemResponseDto.class);
+        return ObjectMapperUtils.mapAll(items, ItemResponseDto.class);
     }
 
 
     public ItemResponseDto updateItemBooked(Long id, boolean booked) {
-
-        boolean existsBookedById = itemRepository.existsById(id);
-        if (!existsBookedById){
-            throw new RuntimeException("Item Not Found!");
-        }
-        Item item = itemRepository.updateByBooked(id , booked);
-        itemRepository.save(item);
+        Item item = itemRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Item Not Found!"));
+        item.setBooked(booked);
         return ObjectMapperUtils.map(item , ItemResponseDto.class);
     }
 
 
     public ItemResponseDto getItemById(Long id) {
         boolean existsItemById = itemRepository.existsById(id);
-        if (!existsItemById){
+        if (!existsItemById) {
             throw new RuntimeException("Item Not Find!");
         }
         Item item = itemRepository.findById(id).get();
-        return ObjectMapperUtils.map(item , ItemResponseDto.class);
+        return ObjectMapperUtils.map(item, ItemResponseDto.class);
     }
 
 
-    public ItemResponseDto getItemsByCategory(Long categoryId) {
-        boolean existsItemByCategoryId = itemRepository.existsById(categoryId);
-        if(!existsItemByCategoryId){
-            throw new RuntimeException("Category Not Found!");
-        }
-        return ObjectMapperUtils.map(itemRepository.findById(categoryId) , ItemResponseDto.class);
+    public List<ItemResponseDto> getItemsByCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category Not Found!"));
+
+        List<Item> items = itemRepository.findAllByCategory(category);
+        return ObjectMapperUtils.mapAll(items, ItemResponseDto.class);
     }
 }

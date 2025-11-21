@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.dto.response;
 
+import com.ecommerce.ecommerce.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,6 @@ public class ItemResponseDto {
     private String description;
     private double price;
     private String imagePath;
-    private boolean booked;
-    private String categoryTitle;
-
+    private Boolean booked = false;
+    private CategoryResponseDto category;
 }

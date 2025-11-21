@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.repositories;
 
+import com.ecommerce.ecommerce.entity.Category;
 import com.ecommerce.ecommerce.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findByPriceBetween(double min, double max);
 
-    Item updateByBooked(Long id, boolean booked);
+//    Item updateByBooked(Long id, boolean booked);
 
+    List<Item> findAllByCategory(Category category);
 }

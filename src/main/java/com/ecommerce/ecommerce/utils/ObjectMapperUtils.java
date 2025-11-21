@@ -1,5 +1,8 @@
 package com.ecommerce.ecommerce.utils;
 
+import com.ecommerce.ecommerce.dto.response.CategoryResponseDto;
+import com.ecommerce.ecommerce.dto.response.ItemResponseDto;
+import com.ecommerce.ecommerce.entity.Item;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 
@@ -14,6 +17,18 @@ public class ObjectMapperUtils {
     static {
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+
+
+
+        modelMapper.typeMap(Item.class, ItemResponseDto.class).addMappings(mapper -> {
+            mapper.map(src -> src.getCategory().getTitle(),
+                    (dest, value) -> {
+                        if(dest.getCategory() == null) dest.setCategory(new CategoryResponseDto());
+                        dest.getCategory().setTitle((String) value);
+                    });
+        });
+
 
     }
 
