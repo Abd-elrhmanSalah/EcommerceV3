@@ -6,8 +6,6 @@ import com.ecommerce.ecommerce.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -70,19 +68,15 @@ public class ItemController {
 
     @Operation(summary = "update items by booked", description = "API to update items booked or not in the system")
     @PatchMapping("/booked/{id}")
-    public ResponseEntity<?> updateItemBooked(@PathVariable Long id) {
-        itemService.updateItemBooked(id, true);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ItemResponseDto updateItemBooked(@PathVariable Long id) {
+        return itemService.updateItemBooked(id, true);
     }
 
 
     @Operation(summary = "update item to unbook", description = "API to make item available")
     @PatchMapping("/unbooked/{id}")
-    public ResponseEntity<?> updateItemUnbooked(@PathVariable Long id) {
-        itemService.updateItemBooked(id, false);
-        return new ResponseEntity<>(HttpStatus.OK);
-
+    public ItemResponseDto updateItemUnbooked(@PathVariable Long id) {
+        return itemService.updateItemBooked(id, false);
     }
 
 

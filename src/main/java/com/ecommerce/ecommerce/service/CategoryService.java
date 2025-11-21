@@ -36,7 +36,7 @@ public class CategoryService {
         if (!existsById) {
             throw new RuntimeException("Category Not Found!");
         }
-        return ObjectMapperUtils.map(categoryRepository.findById(id).get(), CategoryResponseDto.class);
+        return ObjectMapperUtils.map(categoryRepository.findById(id), CategoryResponseDto.class);
     }
 
 

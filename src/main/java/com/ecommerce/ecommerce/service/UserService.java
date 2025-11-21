@@ -93,12 +93,4 @@ public class UserService {
 
     }
 
-    public void login(String email, String password) {
-        boolean existsByEmailAndPassword = userRepositories.existsByEmailAndPassword(email, password);
-        if (!existsByEmailAndPassword) {
-            throw new RuntimeException("Username or password incorrect");
-
-        }
-    }
-
 }
