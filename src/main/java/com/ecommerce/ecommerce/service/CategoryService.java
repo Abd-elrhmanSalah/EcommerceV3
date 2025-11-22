@@ -4,6 +4,7 @@ import com.ecommerce.ecommerce.dto.request.CategoryRequestDto;
 import com.ecommerce.ecommerce.dto.response.CategoryResponseDto;
 import com.ecommerce.ecommerce.dto.response.ItemResponseDto;
 import com.ecommerce.ecommerce.entity.Category;
+import com.ecommerce.ecommerce.entity.SystemUser;
 import com.ecommerce.ecommerce.repositories.CategoryRepository;
 import com.ecommerce.ecommerce.utils.ObjectMapperUtils;
 import lombok.AllArgsConstructor;
@@ -40,6 +41,26 @@ public class CategoryService {
 
     public List<CategoryResponseDto> getAllCategories() {
         return ObjectMapperUtils.mapAll(categoryRepository.findAll(), CategoryResponseDto.class);
+    }
+
+
+    public CategoryResponseDto updateCategory(Long id, CategoryRequestDto categoryDto) {
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category Not Found!"));
+        existingCategory.setTitle(categoryDto.getTitle());
+        if (categoryRepository.existsByTitle(categoryDto.getTitle())) {
+            throw new RuntimeException("Category name is already exist");
+        }
+        Category saved = categoryRepository.save(existingCategory);
+        return ObjectMapperUtils.map(saved, CategoryResponseDto.class);
+    }
+
+
+    public void delete(Long id) {
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category Not Found!"));
+        existingCategory.setIsDeleted(true);
+        categoryRepository.save(existingCategory);
     }
 
 }

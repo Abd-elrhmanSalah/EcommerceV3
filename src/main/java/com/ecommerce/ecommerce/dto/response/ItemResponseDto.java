@@ -17,5 +17,6 @@ public class ItemResponseDto {
     private double price;
     private String imagePath;
     private Boolean booked = false;
+    private Boolean isDeleted = false;
     private CategoryResponseDto category;
 }

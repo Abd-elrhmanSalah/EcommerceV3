@@ -26,11 +26,15 @@ public class Item {
     @Column(name = "PRICE")
     private double price;
 
-    @Column(name = "IMAGEPATH")
+    @Column(name = "IMAGE_PATH")
     private String imagePath;
 
     @Column(name = "BOOKED")
     private boolean booked = false;
+
+    @Column(name = "IS_DELETED")
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_ID", nullable = false)

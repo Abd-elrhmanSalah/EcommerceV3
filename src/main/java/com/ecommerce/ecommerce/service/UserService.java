@@ -7,8 +7,6 @@ import com.ecommerce.ecommerce.entity.SystemUser;
 import com.ecommerce.ecommerce.repositories.UserRepositories;
 import com.ecommerce.ecommerce.utils.ObjectMapperUtils;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,8 +53,10 @@ public class UserService {
 
 
     public void deleteUser(Long id) {
-        isUserExist(id);
-        userRepositories.deleteById(id);
+        SystemUser existingUser = userRepositories.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(()->new RuntimeException("User Not Found!"));
+        existingUser.setIsBlockedUser(true);
+        userRepositories.save(existingUser);
     }
 
 

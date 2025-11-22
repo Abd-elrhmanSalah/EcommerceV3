@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -40,6 +41,10 @@ public class SystemUser {
 
     @Column(name = "IS_BLOCKED_USER")
     private Boolean isBlockedUser = false;
+
+    @Column(name = "IS_DELETED")
+    @Builder.Default
+    private Boolean isDeleted = false;
 
 }
 

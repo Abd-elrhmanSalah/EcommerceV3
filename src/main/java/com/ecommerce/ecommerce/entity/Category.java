@@ -22,6 +22,10 @@ public class Category {
     @Column(name = "TITLE", nullable = false, unique = true)
     private String title;
 
+    @Column(name = "IS_DELETED")
+    @Builder.Default
+    private Boolean isDeleted = false;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Item> items;
 

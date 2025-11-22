@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
@@ -13,7 +14,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findByPriceBetween(double min, double max);
 
-//    Item updateByBooked(Long id, boolean booked);
-
     List<Item> findAllByCategory(Category category);
+
+    Optional<Item> findByIdAndIsDeletedFalse(Long id);
 }

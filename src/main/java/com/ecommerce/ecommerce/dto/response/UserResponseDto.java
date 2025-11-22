@@ -16,6 +16,9 @@ public class UserResponseDto {
     private String lastName;
     private String phoneNumber;
     private String email;
-    private Boolean isBlockedUser;
+    private Boolean isBlockedUser = false;
+    private Boolean isDeleted = false;
+
+
 
 }

@@ -15,5 +15,6 @@ public class CategoryResponseDto {
 
     private Long id;
     private String title;
+    private Boolean isDeleted = false;
     private List<ItemResponseDto> items;
 }

@@ -33,27 +33,26 @@ public class ItemService {
     }
 
     public ItemResponseDto updateItem(Long id, ItemRequestDto itemDto) {
-        Item existingItem = itemRepository.findById(id)
+        itemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item Not Found!"));
 
-        Category category = categoryRepository.findById(itemDto.getCategoryId())
+        categoryRepository.findById(itemDto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category Not Found!"));
 
-        existingItem.setTitle(itemDto.getTitle());
-        existingItem.setDescription(itemDto.getDescription());
-        existingItem.setPrice(itemDto.getPrice());
-        existingItem.setImagePath(itemDto.getImagePath());
-        existingItem.setCategory(category);
+        Item map = ObjectMapperUtils.map(itemDto, Item.class);
+        map.setId(id);
 
-        Item saved = itemRepository.save(existingItem);
+
+        Item saved = itemRepository.save(map);
         return ObjectMapperUtils.map(saved, ItemResponseDto.class);
     }
 
 
     public void deleteItem(Long id) {
-        Item item = itemRepository.findById(id)
+        Item existingItem = itemRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Item Not Found!"));
-        itemRepository.delete(item);
+        existingItem.setIsDeleted(true);
+        itemRepository.save(existingItem);
     }
 
 
@@ -82,9 +81,9 @@ public class ItemService {
 
     public ItemResponseDto updateItemBooked(Long id, boolean booked) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Item Not Found!"));
+                .orElseThrow(() -> new RuntimeException("Item Not Found!"));
         item.setBooked(booked);
-        return ObjectMapperUtils.map(item , ItemResponseDto.class);
+        return ObjectMapperUtils.map(item, ItemResponseDto.class);
     }
 
 
